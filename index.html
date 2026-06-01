@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Terra Viva — Futuro Sustentável</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #f5f0e8;
+      --earth: #6b4c2a;
+      --moss: #4a6741;
+      --sage: #8aaa7a;
+      --clay: #c47a3a;
+      --dark: #1e1a14;
+      --leaf: #2d5a27;
+      --sand: #d9c9a8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 3rem;
+      background: rgba(245,240,232,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--sand);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--leaf);
+      letter-spacing: 0.02em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--earth);
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--leaf); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 80% 20%, rgba(74,103,65,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse at 10% 80%, rgba(196,122,58,0.10) 0%, transparent 50%);
+    }
+    .hero-grain {
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: 0.4;
+    }
+    .hero-text { position: relative; z-index: 1; }
+    .hero-eyebrow {
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--clay);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 5vw, 5.5rem);
+      line-height: 1.05;
+      color: var(--dark);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.4s forwards;
+    }
+    .hero-title em { color: var(--leaf); font-style: italic; }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--earth);
+      line-height: 1.7;
+      max-width: 480px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.6s forwards;
+    }
+    .hero-cta {
+      display: inline-block;
+      margin-top: 2.5rem;
+      padding: 0.9rem 2.2rem;
+      background: var(--leaf);
+      color: var(--cream);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-radius: 2px;
+      transition: background 0.25s, transform 0.2s;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.8s forwards;
+    }
+    .hero-cta:hover { background: var(--moss); transform: translateY(-2px); }
+
+    .hero-visual {
+      position: relative; z-index: 1;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .hero-circle {
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 40%, var(--sage), var(--leaf));
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      opacity: 0;
+      animation: fadeIn 1.2s 0.5s forwards;
+      box-shadow: 0 40px 80px rgba(45,90,39,0.25);
+    }
+    .hero-circle-inner {
+      font-size: 9rem;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.2));
+      animation: float 5s ease-in-out infinite;
+    }
+    .hero-badge {
+      position: absolute;
+      background: var(--clay);
+      color: white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .badge-1 { top: 10%; right: -5%; animation: float 4s 0.5s ease-in-out infinite; }
+    .badge-2 { bottom: 15%; left: -8%; animation: float 4.5s 1s ease-in-out infinite; }
+    .badge-3 { bottom: 30%; right: -10%; animation: float 5s 0.2s ease-in-out infinite; }
+
+    /* STATS */
+    #stats {
+      background: var(--dark);
+      padding: 5rem 3rem;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .stat-item {
+      padding: 3rem;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      text-align: center;
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      color: var(--sage);
+      display: block;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      line-height: 1.5;
+    }
+
+    /* SECTIONS */
+    section { padding: 7rem 3rem; }
+
+    .section-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--clay);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      color: var(--dark);
+    }
+    .section-title em { color: var(--moss); font-style: italic; }
+    .section-body {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: #5a4a35;
+      max-width: 560px;
+    }
+
+    /* PROBLEMS */
+    #problemas {
+      background: var(--cream);
+    }
+    .problems-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-top: 4rem;
+    }
+    .problem-cards { display: flex; flex-direction: column; gap: 1.2rem; }
+    .problem-card {
+      background: white;
+      border-left: 4px solid var(--clay);
+      padding: 1.5rem 1.8rem;
+      border-radius: 0 8px 8px 0;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .problem-card:hover { transform: translateX(6px); box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+    .problem-card h3 { font-size: 1rem; font-weight: 500; color: var(--earth); margin-bottom: 0.4rem; }
+    .problem-card p { font-size: 0.88rem; line-height: 1.6; color: #7a6a55; }
+
+    .problem-visual {
+      position: relative;
+      height: 420px;
+    }
+    .big-leaf {
+      position: absolute;
+      font-size: 14rem;
+      opacity: 0.12;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .chart-bars {
+      position: absolute;
+      bottom: 0; left: 50%; transform: translateX(-50%);
+      display: flex; align-items: flex-end; gap: 1rem;
+    }
+    .bar {
+      width: 52px;
+      border-radius: 6px 6px 0 0;
+      position: relative;
+      transition: height 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .bar span {
+      position: absolute; top: -24px; left: 50%; transform: translateX(-50%);
+      font-size: 0.75rem; font-weight: 500; white-space: nowrap; color: var(--earth);
+    }
+    .bar-label {
+      position: absolute; bottom: -28px; left: 50%; transform: translateX(-50%);
+      font-size: 0.65rem; color: #999; white-space: nowrap; text-align: center;
+    }
+
+    /* SOLUTIONS */
+    #solucoes { background: #f0ece0; }
+    .solutions-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: start; }
+    .solutions-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+    .sol-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .sol-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(0,0,0,0.12); }
+    .sol-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      background: linear-gradient(90deg, var(--moss), var(--sage));
+    }
+    .sol-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+    .sol-card h3 { font-size: 1rem; font-weight: 500; color: var(--dark); margin-bottom: 0.5rem; }
+    .sol-card p { font-size: 0.85rem; line-height: 1.6; color: #6a5a45; }
+
+    /* DATA */
+    #dados {
+      background: var(--dark);
+      color: var(--cream);
+    }
+    #dados .section-title { color: var(--cream); }
+    #dados .section-body { color: rgba(255,255,255,0.6); }
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      margin-top: 4rem;
+    }
+    .data-items { display: flex; flex-direction: column; gap: 2rem; }
+    .data-item {}
+    .data-item-top {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 0.5rem;
+    }
+    .data-item-label { font-size: 0.88rem; color: rgba(255,255,255,0.7); }
+    .data-item-pct { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--sage); }
+    .data-bar {
+      height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;
+    }
+    .data-bar-fill {
+      height: 100%; background: linear-gradient(90deg, var(--moss), var(--sage));
+      border-radius: 3px; width: 0;
+      transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .donut-wrap {
+      display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
+    }
+    .donut-svg { width: 220px; height: 220px; }
+    .donut-legend { display: flex; flex-direction: column; gap: 0.7rem; }
+    .legend-item { display: flex; align-items: center; gap: 0.7rem; font-size: 0.8rem; color: rgba(255,255,255,0.7); }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ACAO */
+    #acao { background: var(--moss); }
+    #acao .section-title { color: var(--cream); }
+    #acao .section-eyebrow { color: var(--sage); }
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+    .action-card {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: background 0.25s, transform 0.2s;
+      cursor: pointer;
+    }
+    .action-card:hover { background: rgba(255,255,255,0.2); transform: translateY(-4px); }
+    .action-icon { font-size: 2.5rem; display: block; margin-bottom: 1rem; }
+    .action-card h3 { font-size: 0.95rem; color: white; margin-bottom: 0.5rem; font-weight: 500; }
+    .action-card p { font-size: 0.8rem; color: rgba(255,255,255,0.65); line-height: 1.5; }
+
+    /* FOOTER */
+    footer {
+      background: var(--dark);
+      padding: 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .footer-logo { font-family: 'Playfair Display', serif; color: var(--sage); font-size: 1.2rem; }
+    .footer-text { font-size: 0.8rem; color: rgba(255,255,255,0.3); text-align: center; }
+    .footer-tagline { font-size: 0.8rem; color: rgba(255,255,255,0.4); font-style: italic; }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-14px); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (max-width: 900px) {
+      #hero { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      #stats { grid-template-columns: 1fr; }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .problems-grid, .solutions-intro, .data-grid { grid-template-columns: 1fr; }
+      .action-grid { grid-template-columns: 1fr 1fr; }
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Terra Viva</div>
+    <ul class="nav-links">
+      <li><a href="#problemas">Problemas</a></li>
+      <li><a href="#solucoes">Soluções</a></li>
+      <li><a href="#dados">Dados</a></li>
+      <li><a href="#acao">Ação</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grain"></div>
+    <div class="hero-text">
+      <p class="hero-eyebrow">Alimentação · Agricultura · Futuro</p>
+      <h1 class="hero-title">Como alimentamos<br>o mundo <em>importa</em><br>para o planeta.</h1>
+      <p class="hero-sub">O sistema alimentar global é responsável por até 37% das emissões de gases de efeito estufa. Transformar a forma como produzimos e consumimos alimentos é uma das chaves para um futuro sustentável.</p>
+      <a href="#problemas" class="hero-cta">Explorar</a>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-circle">
+        <span class="hero-circle-inner">🌱</span>
+        <span class="hero-badge badge-1">🌍 37% das emissões</span>
+        <span class="hero-badge badge-2">💧 70% da água doce</span>
+        <span class="hero-badge badge-3">🌾 800M com fome</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div id="stats">
+    <div class="stat-item reveal">
+      <span class="stat-num">37%</span>
+      <span class="stat-label">das emissões globais<br>vêm da alimentação</span>
+    </div>
+    <div class="stat-item reveal">
+      <span class="stat-num">70%</span>
+      <span class="stat-label">da água doce consumida<br>é pela agricultura</span>
+    </div>
+    <div class="stat-item reveal">
+      <span class="stat-num">1/3</span>
+      <span class="stat-label">dos alimentos produzidos<br>é desperdiçado</span>
+    </div>
+  </div>
+
+  <!-- PROBLEMAS -->
+  <section id="problemas">
+    <p class="section-eyebrow reveal">O diagnóstico</p>
+    <h2 class="section-title reveal">Os <em>desafios</em> do sistema<br>alimentar atual</h2>
+    <div class="problems-grid">
+      <div class="problem-cards reveal">
+        <div class="problem-card">
+          <h3>🏭 Agricultura industrial e emissões</h3>
+          <p>A pecuária intensiva e o uso excessivo de fertilizantes sintéticos liberam metano, óxido nitroso e CO₂ em larga escala, acelerando as mudanças climáticas.</p>
+        </div>
+        <div class="problem-card">
+          <h3>🪵 Desmatamento para pasto e lavoura</h3>
+          <p>Florestas tropicais como a Amazônia são destruídas para dar espaço à soja e ao gado, eliminando sumidouros naturais de carbono e biodiversidade.</p>
+        </div>
+        <div class="problem-card">
+          <h3>💧 Crise hídrica na irrigação</h3>
+          <p>O agronegócio convencional depleta aquíferos e rios, comprometendo o abastecimento de água para gerações futuras em várias regiões do planeta.</p>
+        </div>
+        <div class="problem-card">
+          <h3>🧪 Degradação do solo</h3>
+          <p>O uso intensivo de agrotóxicos e o monocultivo esgotam os nutrientes do solo, reduzindo a capacidade produtiva e contaminando ecossistemas.</p>
+        </div>
+      </div>
+      <div class="problem-visual reveal">
+        <span class="big-leaf">🌿</span>
+        <div class="chart-bars" id="chartBars">
+          <div class="bar" style="background: var(--clay); height: 0;" data-height="180">
+            <span>14.5%</span>
+            <div class="bar-label">Pecuária</div>
+          </div>
+          <div class="bar" style="background: var(--moss); height: 0;" data-height="130">
+            <span>10%</span>
+            <div class="bar-label">Lavoura</div>
+          </div>
+          <div class="bar" style="background: var(--sage); height: 0;" data-height="90">
+            <span>6%</span>
+            <div class="bar-label">Desmate</div>
+          </div>
+          <div class="bar" style="background: var(--sand); height: 0;" data-height="70">
+            <span>5%</span>
+            <div class="bar-label">Desperdício</div>
+          </div>
+          <div class="bar" style="background: var(--earth); height: 0;" data-height="50">
+            <span>3%</span>
+            <div class="bar-label">Logística</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUCOES -->
+  <section id="solucoes">
+    <div class="solutions-intro">
+      <div>
+        <p class="section-eyebrow reveal">Caminhos para a mudança</p>
+        <h2 class="section-title reveal">Soluções que já <em>existem</em> e<br>precisam de escala</h2>
+      </div>
+      <p class="section-body reveal" style="padding-top: 3.5rem;">Transformar o sistema alimentar não é uma utopia — é uma necessidade urgente com soluções concretas disponíveis hoje. O que falta é vontade política, investimento e mudança cultural.</p>
+    </div>
+    <div class="solutions-cards">
+      <div class="sol-card reveal">
+        <span class="sol-icon">🌾</span>
+        <h3>Agroecologia</h3>
+        <p>Produção integrada com a natureza, usando biodiversidade, compostagem e manejo orgânico para restituir a saúde do solo sem agrotóxicos.</p>
+      </div>
+      <div class="sol-card reveal">
+        <span class="sol-icon">🥦</span>
+        <h3>Dietas Plant-based</h3>
+        <p>Reduzir o consumo de proteína animal pode diminuir em até 73% a pegada de carbono alimentar individual — a maior mudança que uma pessoa pode fazer.</p>
+      </div>
+      <div class="sol-card reveal">
+        <span class="sol-icon">🔄</span>
+        <h3>Economia Circular Alimentar</h3>
+        <p>Reaproveitar resíduos orgânicos, redirecionar excedentes e criar cadeias curtas de abastecimento reduz desperdício e emissões no transporte.</p>
+      </div>
+      <div class="sol-card reveal">
+        <span class="sol-icon">🌊</span>
+        <h3>Agricultura Regenerativa</h3>
+        <p>Práticas que restauram o solo, retêm carbono, recuperam lençóis freáticos e aumentam resiliência climática nas propriedades rurais.</p>
+      </div>
+      <div class="sol-card reveal">
+        <span class="sol-icon">🏙️</span>
+        <h3>Hortas Urbanas</h3>
+        <p>Produção local nas cidades reduz logística, fortalece comunidades e conecta pessoas ao ciclo natural dos alimentos.</p>
+      </div>
+      <div class="sol-card reveal">
+        <span class="sol-icon">🧬</span>
+        <h3>Proteínas Alternativas</h3>
+        <p>Carnes cultivadas em laboratório, insetos e fungos têm potencial de produzir proteínas com fração do impacto ambiental da pecuária convencional.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DADOS -->
+  <section id="dados">
+    <p class="section-eyebrow reveal" style="color: var(--sage);">Números que importam</p>
+    <h2 class="section-title reveal">O que os dados <em>mostram</em></h2>
+    <div class="data-grid">
+      <div class="data-items">
+        <div class="data-item reveal">
+          <div class="data-item-top">
+            <span class="data-item-label">Emissões evitáveis com dieta plant-based</span>
+            <span class="data-item-pct">73%</span>
+          </div>
+          <div class="data-bar"><div class="data-bar-fill" data-width="73"></div></div>
+        </div>
+        <div class="data-item reveal">
+          <div class="data-item-top">
+            <span class="data-item-label">Alimentos desperdiçados antes de chegar ao prato</span>
+            <span class="data-item-pct">33%</span>
+          </div>
+          <div class="data-bar"><div class="data-bar-fill" data-width="33"></div></div>
+        </div>
+        <div class="data-item reveal">
+          <div class="data-item-top">
+            <span class="data-item-label">Terra arável dedicada à criação de animais</span>
+            <span class="data-item-pct">77%</span>
+          </div>
+          <div class="data-bar"><div class="data-bar-fill" data-width="77"></div></div>
+        </div>
+        <div class="data-item reveal">
+          <div class="data-item-top">
+            <span class="data-item-label">Redução de emissões com agr. regenerativa</span>
+            <span class="data-item-pct">45%</span>
+          </div>
+          <div class="data-bar"><div class="data-bar-fill" data-width="45"></div></div>
+        </div>
+        <div class="data-item reveal">
+          <div class="data-item-top">
+            <span class="data-item-label">Água economizada com irrigação inteligente</span>
+            <span class="data-item-pct">50%</span>
+          </div>
+          <div class="data-bar"><div class="data-bar-fill" data-width="50"></div></div>
+        </div>
+      </div>
+      <div class="donut-wrap reveal">
+        <svg class="donut-svg" viewBox="0 0 220 220">
+          <circle cx="110" cy="110" r="80" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="32"/>
+          <!-- Pecuária 14.5% -->
+          <circle cx="110" cy="110" r="80" fill="none" stroke="#c47a3a" stroke-width="32"
+            stroke-dasharray="73 430" stroke-dashoffset="0" transform="rotate(-90 110 110)"/>
+          <!-- Lavoura 10% -->
+          <circle cx="110" cy="110" r="80" fill="none" stroke="#4a6741" stroke-width="32"
+            stroke-dasharray="50 430" stroke-dashoffset="-73" transform="rotate(-90 110 110)"/>
+          <!-- Desmate 6% -->
+          <circle cx="110" cy="110" r="80" fill="none" stroke="#8aaa7a" stroke-width="32"
+            stroke-dasharray="30 430" stroke-dashoffset="-123" transform="rotate(-90 110 110)"/>
+          <!-- Outros -->
+          <circle cx="110" cy="110" r="80" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="32"
+            stroke-dasharray="40 430" stroke-dashoffset="-153" transform="rotate(-90 110 110)"/>
+          <text x="110" y="105" text-anchor="middle" font-family="Playfair Display, serif" font-size="28" fill="#8aaa7a">37%</text>
+          <text x="110" y="128" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" fill="rgba(255,255,255,0.5)">do clima global</text>
+        </svg>
+        <div class="donut-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:#c47a3a"></span>Pecuária (14.5%)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#4a6741"></span>Lavoura (10%)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#8aaa7a"></span>Desmatamento (6%)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:rgba(255,255,255,0.2)"></span>Outros (7%)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACAO -->
+  <section id="acao">
+    <p class="section-eyebrow reveal">O que você pode fazer</p>
+    <h2 class="section-title reveal">Cada <em>escolha</em> no prato<br>é um voto pelo futuro</h2>
+    <div class="action-grid">
+      <div class="action-card reveal">
+        <span class="action-icon">🥗</span>
+        <h3>Coma menos carne</h3>
+        <p>Substituir carne vermelha por vegetais 3x por semana reduz sua pegada alimentar em até 40%.</p>
+      </div>
+      <div class="action-card reveal">
+        <span class="action-icon">🛒</span>
+        <h3>Compre local e orgânico</h3>
+        <p>Feiras livres e CSA (agricultura apoiada pela comunidade) fortalecem produtores e reduzem logística.</p>
+      </div>
+      <div class="action-card reveal">
+        <span class="action-icon">♻️</span>
+        <h3>Reduza o desperdício</h3>
+        <p>Planeje suas refeições, use talos e cascas, e composte o que sobrar. Simples e impactante.</p>
+      </div>
+      <div class="action-card reveal">
+        <span class="action-icon">🌱</span>
+        <h3>Plante algo</h3>
+        <p>Uma horta em vaso, uma muda no quintal. Reconectar-se com a terra muda a forma como você enxerga o alimento.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">Terra Viva</span>
+    <span class="footer-text">Conteúdo educativo sobre alimentação e sustentabilidade<br>Dados: FAO, IPCC, Our World in Data</span>
+    <span class="footer-tagline">A terra cuida de quem cuida dela.</span>
+  </footer>
+
+  <script>
+    // Intersection Observer for reveals
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('visible'), 80 * (entry.target.dataset.delay || 0));
+          entry.target.classList.add('visible');
+
+          // Animate bar charts
+          if (entry.target.closest('#problemas')) {
+            const bars = document.querySelectorAll('#chartBars .bar');
+            bars.forEach((bar, i) => {
+              setTimeout(() => {
+                bar.style.transition = 'height 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                bar.style.height = bar.dataset.height + 'px';
+              }, i * 100 + 200);
+            });
+          }
+
+          // Animate data bars
+          if (entry.target.closest('#dados')) {
+            const fills = document.querySelectorAll('.data-bar-fill');
+            fills.forEach((fill, i) => {
+              setTimeout(() => { fill.style.width = fill.dataset.width + '%'; }, i * 150 + 200);
+            });
+          }
+
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
